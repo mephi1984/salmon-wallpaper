@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Reflected berg</string>
+	<string name="description">Mountain weerspiegeld in het water met sneeuwval effecten</string>
+	<string name="feedback">Als de toepassing crasht, neem dan contact met mij op: mephi1984@gmail.com</string>
+
+	<string name="p_snow">Sneeuwval</string>
+	<string name="p_snow_on">Sneeuwval is ingeschakeld</string>
+	<string name="p_snow_off">Sneeuwval is uitgeschakeld</string>
+	
+	<string name="p_timeofday">Tijd van de dag</string>
+	<string name="p_stimeofday">Kies de tijd van de dag</string>
+	
+	<string-array name="timeofday_id">
+		<item>Dag</item>
+		<item>Bewolkte dag</item>
+		<item>Nacht</item>
+	</string-array>
+	
+
+</resources>
+

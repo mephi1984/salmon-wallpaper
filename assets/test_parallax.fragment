@@ -1,0 +1,34 @@
+precision lowp float;
+
+uniform sampler2D Texture;
+uniform sampler2D NormalMap;
+uniform vec3 LightDirection;
+varying vec2 texCoord;
+
+varying vec3 camVec;
+varying vec3 normVec;
+
+void main() 
+{
+
+	vec3 cVec = normalize(camVec);
+	
+	float parallax = 0.035;
+
+	//double refinement
+	float height = texture2D(NormalMap, texCoord.xy).a;
+	float offset = parallax * (2.0 * height - 1.0);
+	vec2 parallaxTexCoord = texCoord.xy + offset * cVec.xy;
+	height += texture2D(NormalMap, parallaxTexCoord).a;
+	
+	offset = parallax * (height - 1.0);
+	
+	parallaxTexCoord = texCoord.xy + offset * cVec.xy;
+	
+	vec3 nvec = normalize(normVec);
+	
+	
+	float cosf = max(0.0, dot(nvec, -LightDirection));
+	
+	gl_FragColor =  vec4((texture2D(Texture, parallaxTexCoord).rgb * (cosf * 0.75 + 0.25)), 1.0);
+}

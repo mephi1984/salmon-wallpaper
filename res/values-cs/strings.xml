@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Horská odražené</string>
+	<string name="description">Horská odráží ve vodě, s účinkem sněhu</string>
+	<string name="feedback">Pokud dojde k chybě aplikace, prosím, kontaktujte mě: mephi1984@gmail.com</string>
+
+	<string name="p_snow">Sněžení</string>
+	<string name="p_snow_on">Sněžení je zapnuta</string>
+	<string name="p_snow_off">Sněžení je vypnutý</string>
+	
+	<string name="p_timeofday">Denní čas</string>
+	<string name="p_stimeofday">Vyberte si čas dne</string>
+		
+	
+	<string-array name="timeofday_id">
+		<item>Den</item>
+		<item>Přeháňky den</item>
+		<item>Noc</item>
+	</string-array>
+	
+</resources>
+

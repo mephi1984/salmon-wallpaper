@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Montanha refletidas</string>
+	<string name="description">Montanha refletida na água com efeitos queda de neve</string>
+	<string name="feedback">Se o aplicativo falha, por favor contacte-me: mephi1984@gmail.com</string>
+
+	<string name="p_snow">Queda de neve</string>
+	<string name="p_snow_on">Neve está ligado</string>
+	<string name="p_snow_off">Neve está desligado</string>
+	
+	<string name="p_timeofday">Hora do dia</string>
+	<string name="p_stimeofday">Escolha a hora do dia</string>
+	
+	
+	<string-array name="timeofday_id">
+		<item>Dia</item>
+		<item>Dia nublado</item>
+		<item>Noite</item>
+	</string-array>
+
+	
+</resources>
+

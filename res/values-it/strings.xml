@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Montagna riflessa</string>
+	<string name="description">Montagna riflessa nell\'acqua, con l\'effetto di neve</string>
+	<string name="feedback">Se l\'applicazione si blocca, si prega di contattare me: mephi1984@gmail.com</string>
+
+	<string name="p_snow">Nevicate</string>
+	<string name="p_snow_on">Nevicate si accende</string>
+	<string name="p_snow_off">Nevicata è spento</string>
+	
+	<string name="p_timeofday">Il momento della giornata</string>
+	<string name="p_stimeofday">Scegliere il momento della giornata</string>
+	
+	
+	
+	<string-array name="timeofday_id">
+		<item>Giorno</item>
+		<item>Giornata nuvolosa</item>
+		<item>Notte</item>
+	</string-array>
+	
+	
+	<string-array name="timeofday_value">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	
+</resources>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Отраженная гора</string>
+	<string name="description">Гора, отраженная в воде, с эффектом снегопада</string>
+	<string name="feedback">Если приложение падает, пожалуйста, свяжитесь со мною: mephi1984@gmail.com</string>
+
+	<string name="p_snow">Снегопад</string>
+	<string name="p_snow_on">Снегопад включен</string>
+	<string name="p_snow_off">Снегопад выключен</string>
+	
+	<string name="p_timeofday">Время суток</string>
+	<string name="p_stimeofday">Выберите время суток</string>
+	
+	
+	<string-array name="timeofday_id">
+		<item>День</item>
+		<item>Облачный день</item>
+		<item>Ночь</item>
+	</string-array>
+	
+
+</resources>
+

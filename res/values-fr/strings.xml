@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Montagne réfléchie</string>
+	<string name="description">Montagne reflète dans l\'eau avec des effets des chutes de neige</string>
+	<string name="feedback">Si l\'application se bloque, s\'il vous plaît contactez-moi : mephi1984@gmail.com</string>
+
+	<string name="p_snow">Chutes de neige</string>
+	<string name="p_snow_on">Chutes de neige est en marche</string>
+	<string name="p_snow_off">Chutes de neige est éteint</string>
+	
+	<string name="p_timeofday">L\'heure du jour</string>
+	<string name="p_stimeofday">Choisissez le moment de la journée</string>
+	
+	<string-array name="timeofday_id">
+		<item>Jour</item>
+		<item>Temps nuageux</item>
+		<item>Nuit</item>
+	</string-array>
+	
+	
+</resources>
+

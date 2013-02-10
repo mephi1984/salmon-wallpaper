@@ -1,0 +1,11 @@
+attribute vec3 vPosition;
+attribute vec2 vTexCoord;
+varying vec2 texCoord;
+uniform mat4 ProjectionMatrix;
+
+void main() 
+{
+	//480x320
+	gl_Position = ProjectionMatrix * vec4(vPosition.xyz, 1.0);
+	texCoord = vTexCoord;
+}

@@ -1,0 +1,56 @@
+precision lowp float;
+
+uniform sampler2D Texture;
+uniform sampler2D NormalMap;
+uniform vec3 CamPos;
+uniform float WaterScale;
+varying vec2 texCoord;
+uniform float Time;
+
+void main() 
+{
+
+	vec2 localTexCoord = texCoord;
+
+	vec3 camVec = CamPos.xyz;
+	float len = length(camVec);
+	float squeeze = 0.5*(len / CamPos.y );
+	
+	squeeze = min(squeeze, 4.0);
+	
+	//if (squeeze>15.0) squeeze = 15.0;
+	
+	vec3 v3 = vec3(0.0,1.0,0.0);
+	vec3 v2 = vec3(1.0,0.0,0.0);
+	vec3 v1 = vec3(0.0,0.0,1.0);
+	
+	mat3 rot;
+
+	rot[0] = v1;
+	rot[1] = v2;
+	rot[2] = v3;
+	
+	float sinx = 0.025*sin(Time+localTexCoord.x*2.0);
+	
+	vec3 NVec1 = texture2D(NormalMap, vec2(-Time*0.04 + localTexCoord.x*WaterScale + sinx, -Time*0.04 + squeeze*localTexCoord.y*WaterScale - sinx)).rgb;
+	vec3 NVec2 = texture2D(NormalMap, vec2( Time*0.04 + squeeze*localTexCoord.y*WaterScale - sinx, -Time*0.04 + (1.0-localTexCoord.x)*WaterScale + sinx)).rgb;
+	
+	NVec1 = (NVec1 -0.5) * 2.0;
+	NVec2 = (NVec2 -0.5) * 2.0;
+	
+	
+	vec3 NVec = 0.5*NVec1 + 0.5*NVec2;
+	NVec = rot * NVec;
+	
+	float d = 1.0/(len+0.05);
+	
+	d = min(d, 2.0);
+	
+	localTexCoord.x = max(min(localTexCoord.x + d * NVec.x, 1.0), 0.0);
+	localTexCoord.y = max(min(localTexCoord.y - d * NVec.z, 1.0), 0.0);
+	
+	vec4 specular = vec4(0.8, 0.8, 0.8, 1.0)* (1.0-pow(max(dot(vec3(0.0,1.0,0.0), normalize(NVec)),0.0),2.0));
+	
+
+	gl_FragColor =  texture2D(Texture, localTexCoord).rgba + specular + vec4(0.0, 0.05, 0.1, 0.0);
+}

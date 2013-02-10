@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Reflektierte Berg</string>
+	<string name="description">Berg spiegelt sich im Wasser, mit dem Effekt der Schnee</string>
+	<string name="feedback">Wenn die Anwendung abstürzt, bitte kontaktieren Sie mich: mephi1984@gmail.com</string>
+
+	<string name="p_snow">Schneefall</string>
+	<string name="p_snow_on">Schneefall ist eingeschaltet</string>
+	<string name="p_snow_off">Schneefall ausgeschaltet</string>
+	
+	<string name="p_timeofday">Zeit des Tages</string>
+	<string name="p_stimeofday">Wählen Sie die Zeit des Tages</string>
+	
+	<string-array name="timeofday_id">
+		<item>Day</item>
+		<item>Bewölkten Day</item>
+		<item>Night</item>
+	</string-array>
+	
+	
+</resources>
+

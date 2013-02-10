@@ -1,0 +1,13 @@
+precision lowp float;
+
+uniform sampler2D Texture;
+varying vec2 texCoord;
+varying vec3 vertexPos;
+
+void main() 
+{
+	vec4 texColor = texture2D(Texture,texCoord).rgba;
+	
+	gl_FragColor =  vec4(texColor.rgb, texColor.a); //day
+	
+}

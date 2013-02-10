@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Reflected mountain</string>
+	<string name="description">Mountain reflected in the water with snow effects</string>
+	<string name="feedback">If wallpaper crashes or something else goes wrong, please, contact with me: mephi1984@gmail.com</string>
+
+	<string name="p_snow">Snow</string>
+	<string name="p_snow_on">Snow is on</string>
+	<string name="p_snow_off">Snow is off</string>
+	
+	<string name="p_timeofday">Time of day</string>
+	<string name="p_stimeofday">Choose time of day to display</string>
+	
+	<declare-styleable name="Wallpaper">
+		<!--
+			Component name of an activity that allows the user to modify the
+			current settings for this wallpaper.
+		-->
+		<attr name="settingsActivity" format="reference" />
+		<!-- Reference to a the wallpaper's thumbnail bitmap. -->
+		<attr name="thumbnail" format="reference" />
+		<!-- Name of the author of this component, e.g. Google. -->
+		<attr name="author" format="reference" />
+		<!-- Short description of the component's purpose or behavior. -->
+		<attr name="description" format="reference" />
+	</declare-styleable>
+	
+	
+	<string-array name="timeofday_id">
+		<item>Day</item>
+		<item>Cloudy day</item>
+		<item>Night</item>
+	</string-array>
+	
+	
+	<string-array name="timeofday_value">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	
+</resources>
+
