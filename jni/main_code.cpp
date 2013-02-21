@@ -330,10 +330,10 @@ void TAndroidApplication::InnerInit()
 	*Console<<"Inner init go!\n";
 
 #ifdef TARGET_ANDROID
-	ResourceManager->PathToResources = "";
+	ST::PathToResources = "";
 #endif
 #ifdef TARGET_WIN32
-	ResourceManager->PathToResources = "../../assets/";
+	ST::PathToResources = "../../assets/";
 #endif
 	ResourceManager->ShaderManager.AddShader("DefaultShader", "gui_transparent.vertex", "gui_transparent.fragment");
 	Renderer->PushShader("DefaultShader");
