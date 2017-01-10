@@ -1,0 +1,7 @@
+include ':SalmonEngineAndroid'
+project(':SalmonEngineAndroid').projectDir =new File(settingsDir, '../../engine/SalmonEngineAndroid/app')
+
+
+include ':app'
+
+
