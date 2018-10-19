@@ -15,6 +15,12 @@
 #include <GLES2/gl2ext.h>
 #endif
 
+//#ifdef TARGET_WIN32
+//#define NOMINMAX 1
+//#include <Windows.h>
+//#undef NOMINMAX
+//#endif
+
 #include "boost/shared_ptr.hpp"
 #include "boost/thread/thread.hpp"
 #include "boost/asio.hpp"
@@ -39,21 +45,19 @@ public:
 	bool Inited;
 	bool Loaded;
 	
-	std::vector<boost::variant<boost::function<cardinal()>, boost::function<bool()>, boost::function<void()> > > LoadingQueue;
+	std::vector<boost::variant<boost::function<size_t()>, boost::function<bool()>, boost::function<void()> > > LoadingQueue;
 	
-	TLiteModel* LiteModel;
+	TRenderPair mountain;
+	Matrix4f mountainTransformation;
+
+	TRenderPair ice;
+	std::vector<Matrix4f> iceTransformations;
 
 	float WaterTimer;
 	float SnowTimer;
 	float CloudTimer;
 	float SkyTexShift;
 	bool WaveDir;
-	
-	std::vector<TLiteModel> IceModel;
-	
-	std::shared_ptr<TSimpleLandClass> SimpleLand;
-	
-	std::shared_ptr<TSimpleLandClass> SimpleLandInv;
 
 	TAndroidApplication();
 	
@@ -63,9 +67,9 @@ public:
 	
 	 virtual void InnerDraw();
 	
-	 virtual void InnerUpdate(cardinal dt);
+	 virtual void InnerUpdate(size_t dt);
 	 
-	 virtual void InnerOnMove(vec2 shift);
+	 virtual void InnerOnMove(Vector2f shift);
 
 	 virtual void OnMouseDown(TMouseState& mouseState);
 
