@@ -152,29 +152,71 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 
 
 	Renderer->PushProjectionMatrix(1,1);
-	Renderer->PushSpecialMatrix(Matrix4f::Identity());
+	Renderer->LoadIdentity();
+	//Renderer->PushSpecialMatrix(Matrix4f::Identity());
 
-	if (TimeOfDayPref == 2)
+	if (inv)
 	{
-		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky_night.png"]);
+
+
+		if (TimeOfDayPref == 2)
+		{
+			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky_night.png"]);
+		}
+		else
+		{
+			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky.png"]);
+		}
+		Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(1.f, 0.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
+
+		if (TimeOfDayPref == 1)
+		{
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["final_cloud.png"]);
+			Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(4.f, 0.f), Vector2f(0.0f + SkyTexShift + CloudTimer, 0.f), Vector2f(1.f + SkyTexShift + CloudTimer, 0.5f));
+		}
 	}
 	else
 	{
-		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky.png"]);
+		if (TimeOfDayPref == 2)
+		{
+			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky_night.png"]);
+		}
+		else
+		{
+			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky.png"]);
+		}
+		Renderer->DrawRect(Vector2f(0.0f, 0.54f), Vector2f(1.f, 1.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
+
+		if (TimeOfDayPref == 1)
+		{
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["final_cloud.png"]);
+			Renderer->DrawRect(Vector2f(0.0f, 0.54f), Vector2f(4.f, 1.f), Vector2f(0.0f + SkyTexShift + CloudTimer, 0.f), Vector2f(1.f + SkyTexShift + CloudTimer, 0.5f));
+		}
 	}
 
-	Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(1.f, 0.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
+	//if (TimeOfDayPref == 2)
+	//{
+	//	glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky_night.png"]);
+	//}
+	//else
+	//{
+	//	glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky.png"]);
+	//}
 
-	if (TimeOfDayPref == 1)
-	{
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["final_cloud.png"]);
-		Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(4.f, 0.f), Vector2f(0.0f + SkyTexShift + CloudTimer, 0.f), Vector2f(1.f + SkyTexShift + CloudTimer, 0.5f));
-	}
+	//Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(1.f, 0.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
+
+	//if (TimeOfDayPref == 1)
+	//{
+	//	glClear(GL_DEPTH_BUFFER_BIT);
+	//	glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["final_cloud.png"]);
+	//	Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(4.f, 0.f), Vector2f(0.0f + SkyTexShift + CloudTimer, 0.f), Vector2f(1.f + SkyTexShift + CloudTimer, 0.5f));
+	//}
 
 
 
-	Renderer->PopMatrix();
+	//Renderer->PopMatrix();
 	Renderer->PopProjectionMatrix();
 
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -182,7 +224,7 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 
 	if (inv)
 	{
-		Renderer->PushMatrix();
+		//Renderer->PushMatrix();
 		Renderer->TranslateMatrix(Vector3f(0,0.1f,0));
 		Renderer->ScaleMatrix(Vector3f(1, -1, 1));
 	}
@@ -217,7 +259,7 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 
 		
 	Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 450.f);
-	Renderer->PushMatrix();
+	//Renderer->PushMatrix();
 	//mCamera.SetCamView();
 
 	{
@@ -246,13 +288,13 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 		}
 	}
 
-	Renderer->PopMatrix();
-	Renderer->PopProjectionMatrix();\
+	//Renderer->PopMatrix();
+	Renderer->PopProjectionMatrix();
 
-	if (inv)
-	{
-		Renderer->PopMatrix();
-	}
+	//if (inv)
+	//{
+	//	Renderer->PopMatrix();
+	//}
 
 	Renderer->PopShader();
 }
@@ -410,13 +452,13 @@ void TAndroidApplication::InnerInit()
 	
 	if (Renderer->GetScreenWidth() > Renderer->GetScreenHeight())
 	{
-		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(30.f);
+		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(150.f);
 		mCamera.MoveDist(cameraDistance);
 	}
 
 	else
 	{
-		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(30.f);
+		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(150.f);
 		mCamera.MoveDist(cameraDistance);
 	}
 
