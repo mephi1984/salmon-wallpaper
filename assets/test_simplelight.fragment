@@ -10,13 +10,14 @@ varying vec2 texCoord;
 
 varying vec3 camVec;
 varying vec3 normVec;
+varying vec3 posVec;
 
 void main() 
 {
 
 	vec3 nvec = normalize(normVec);
 	
-	float cosf = max(0.0, dot(nvec, -LightDirection));
+	float cosf = max(0.0, dot(nvec, LightDirection));
 	
 	//gl_FragColor =  vec4((texture2D(Texture, texCoord).rgb * (cosf * 0.75 + 0.25)), 1.0); //day
 	//gl_FragColor =  vec4((texture2D(Texture, texCoord).rgb * (cosf * 0.5 + 0.25)), 1.0); //twilight

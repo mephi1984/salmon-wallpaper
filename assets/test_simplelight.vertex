@@ -10,6 +10,7 @@ uniform vec3 CamPos;
 varying vec2 texCoord;
 varying vec3 camVec;
 varying vec3 normVec;
+varying vec3 posVec;
 
 void main() 
 {
@@ -27,4 +28,6 @@ void main()
 	camVec =  cVec * rot;
 	
 	normVec = Normal;
+	
+	posVec = vPosition;
 }

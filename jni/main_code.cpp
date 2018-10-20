@@ -32,6 +32,9 @@ extern bool SnowPref;
 
 boost::mutex m2;
 
+TPanoramicCamera mCamera;
+const float cameraDistance = 100.f;
+std::vector<int> iceIndexes;
 
 class LoadingQueueVisitor : public boost::static_visitor<void>
 {
@@ -67,43 +70,74 @@ TAndroidApplication::TAndroidApplication()
 
 void TAndroidApplication::Serialize(boost::property_tree::ptree& propertyTree)
 {
-	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, propertyTree.get_child("Ices"))
-	{
-
-		std::string modelName = v.second.get<std::string>("ModelName");
-		float posx = v.second.get<float>("PosX");
-		float posz = v.second.get<float>("PosZ");
-
-		float angle = v.second.get<float>("Angle", 0.f);
-		float scale = v.second.get<float>("Scale", 1.f);
-
-		Matrix4f iceTransformation = Affine3f(Scaling(scale)).matrix();
-		Matrix3f rotation(Quaternionf(0, cos(angle*pi / 360.f), 0, sin(angle*pi / 360.f)).toRotationMatrix());
-		iceTransformation = Affine3f(rotation).matrix() * iceTransformation;
-		iceTransformation = Affine3f(Translation3f(posx, 0, posz)).matrix() * iceTransformation;
-
-		iceTransformations.push_back(iceTransformation);
-	}
 }
 
+float myMin(float a, float b)
+{
+	return a < b ? a : b;
+}
 
+float myMax(float a, float b)
+{
+	return a > b ? a : b;
+}
 
 void TAndroidApplication::LoadModels()
 {
 
-	auto objData = loadObjFile("mountain/mountain.obj", "");
+	auto objData = loadObjFile("mountain/mountain2.obj", "");
 	mountain = ObjDataToRenderPairs(objData)[0][0];
 
-	mountainTransformation = Affine3f(Scaling(0.5f)).matrix();
-	Matrix3f rotation(Quaternionf(0, 1 * sin(pi / 8 + pi / 2), 0, 1 * cos(pi / 8 + pi / 2)).toRotationMatrix());
-	mountainTransformation = Affine3f(rotation).matrix() * mountainTransformation;
+	ResourceManager->TexList.AddTexture("mountain.png");
+	mountain.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "mountain.png";
 
-	objData = loadObjFile("ice/ice.obj", "");
-	ice = ObjDataToRenderPairs(objData)[0][0];
+	Vector3f size = objData.models[0].maxCorner - objData.models[0].minCorner;
+	float radius = myMax(size[0], myMax(size[1], size[2])) / 2;
+
+	mountainTransformation = Affine3f(Scaling(cameraDistance / radius * 0.25f)).matrix();
+	//Matrix3f rotation(Quaternionf(0, 1 * sin(pi / 8 + pi / 2), 0, 1 * cos(pi / 8 + pi / 2)).toRotationMatrix());
+	//mountainTransformation = Affine3f(rotation).matrix() * mountainTransformation;
+	//mountainTransformation = Affine3f(Translation3f(0, 0, -size[2] / 2.f)).matrix() * mountainTransformation;
+
+	for (int i = 1; i <= 6; ++i)
+	{
+		objData = loadObjFile("ice/ice" + std::to_string(i) + ".obj", "");
+		ices[i - 1] = ObjDataToRenderPairs(objData)[0][0].second;
+	}
+
+	size = objData.models[0].maxCorner - objData.models[0].minCorner;
+	Vector3f centerShift = -(objData.models[0].maxCorner + objData.models[0].minCorner) / 2;
+	radius = myMax(size[0], myMax(size[1], size[2])) / 2;
+
+	ResourceManager->TexList.AddTexture("ice/Textures/ice1.png");
+	ResourceManager->TexList.AddTexture("ice/Textures/ice2.png");
+	ResourceManager->TexList.AddTexture("ice/Textures/ice3.png");
 	
-	std::shared_ptr<boost::property_tree::ptree> p = FileToPropertyTree("ices.xml");
+	std::shared_ptr<boost::property_tree::ptree> p = FileToPropertyTree("ices.json");
 
-	Serialize(*p);
+	for (auto ice : p->get_child("ices"))
+	{
+		TRenderParams params;
+
+		Vector3f position = JSONVectorReader::readVector3f(ice.second.get_child("position"));
+		float scale = ice.second.get<float>("scale");
+		float angle = ice.second.get<float>("angle");
+		iceIndexes.push_back(ice.second.get<int>("type"));
+
+		params.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "ice" + ice.second.get<std::string>("texture") + ".png";
+
+		iceParams.push_back(params);
+
+		Matrix4f iceTransformation = Affine3f(Translation3f(centerShift)).matrix();
+		iceTransformation = Affine3f(Scaling(cameraDistance / radius * 0.1f * scale)).matrix() * iceTransformation;
+		//Matrix3f rotation(Quaternionf(0, cos(angle*pi / 360.f), 0, sin(angle*pi / 360.f)).toRotationMatrix());
+		//iceTransformation = Affine3f(rotation).matrix() * iceTransformation;
+		iceTransformation = Affine3f(Translation3f(position)).matrix() * iceTransformation;
+
+		iceTransformations.push_back(iceTransformation);
+	}
+
+	//Serialize(*p);
 }
 
 void TAndroidApplication::AddFrameBuffers()
@@ -118,51 +152,29 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 
 
 	Renderer->PushProjectionMatrix(1,1);
-	Renderer->LoadIdentity();
+	Renderer->PushSpecialMatrix(Matrix4f::Identity());
 
-	if (inv)
+	if (TimeOfDayPref == 2)
 	{
-
-
-		if (TimeOfDayPref == 2)
-		{
-			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky_night.png"]);
-		}
-		else
-		{
-			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky.png"]);
-		}
-		Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(1.f, 0.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
-
-		if (TimeOfDayPref == 1)
-		{
-			glClear(GL_DEPTH_BUFFER_BIT);
-			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["final_cloud.png"]);
-			Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(4.f, 0.f), Vector2f(0.0f + SkyTexShift + CloudTimer, 0.f), Vector2f(1.f + SkyTexShift + CloudTimer, 0.5f));
-		}
+		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky_night.png"]);
 	}
 	else
 	{
-		if (TimeOfDayPref == 2)
-		{
-			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky_night.png"]);
-		}
-		else
-		{
-			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky.png"]);
-		}
-		Renderer->DrawRect(Vector2f(0.0f, 0.54f), Vector2f(1.f, 1.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
+		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky.png"]);
+	}
 
-		if (TimeOfDayPref == 1)
-		{
-			glClear(GL_DEPTH_BUFFER_BIT);
-			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["final_cloud.png"]);
-			Renderer->DrawRect(Vector2f(0.0f, 0.54f), Vector2f(4.f, 1.f), Vector2f(0.0f + SkyTexShift + CloudTimer, 0.f), Vector2f(1.f + SkyTexShift + CloudTimer, 0.5f));
-		}
+	Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(1.f, 0.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
+
+	if (TimeOfDayPref == 1)
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["final_cloud.png"]);
+		Renderer->DrawRect(Vector2f(0.0f, 0.56f), Vector2f(4.f, 0.f), Vector2f(0.0f + SkyTexShift + CloudTimer, 0.f), Vector2f(1.f + SkyTexShift + CloudTimer, 0.5f));
 	}
 
 
 
+	Renderer->PopMatrix();
 	Renderer->PopProjectionMatrix();
 
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -170,11 +182,15 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 
 	if (inv)
 	{
+		Renderer->PushMatrix();
 		Renderer->TranslateMatrix(Vector3f(0,0.1f,0));
 		Renderer->ScaleMatrix(Vector3f(1, -1, 1));
 	}
 
 	Renderer->PushShader("SimplelightShader");
+
+	RenderUniform3fv("LightDirection", Vector3f(1, 1, 1).data());
+	
 
 	Vector3f dayColor = Vector3f(0,0,0);
 	Vector3f nightColor = Vector3f(0, 0.1f, 0.2f);
@@ -200,35 +216,45 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 		}
 
 		
-		Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 450.f);
+	Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 450.f);
+	Renderer->PushMatrix();
+	//mCamera.SetCamView();
 
+	{
+		Renderer->PushMatrix();
+		Renderer->AddMatrix(mountainTransformation);
+
+		//RenderUniform4fv("light")
+
+		TRenderParamsSetter setter(mountain.first);
+		Renderer->DrawTriangleList(mountain.second);
+
+		Renderer->PopMatrix();
+	}
+
+	{
+		for (int i = 0; i < iceTransformations.size(); i++)
 		{
-			Renderer->PushSpecialMatrix(mountainTransformation);
+			Renderer->PushMatrix();
+			Renderer->AddMatrix(iceTransformations[i]);
 
-			//RenderUniform4fv("light")
-
-			TRenderParamsSetter setter(mountain.first);
-			Renderer->DrawTriangleList(mountain.second);
+			auto& renderPair = ices[iceIndexes[i] - 1];
+			TRenderParamsSetter setter(iceParams[i]);
+			Renderer->DrawTriangleList(ices[iceIndexes[i] - 1]);
 
 			Renderer->PopMatrix();
 		}
+	}
 
-		{
-			TRenderParamsSetter setter(ice.first);
+	Renderer->PopMatrix();
+	Renderer->PopProjectionMatrix();\
 
-			for (int i = 0; i < iceTransformations.size(); i++)
-			{
-				Renderer->PushSpecialMatrix(iceTransformations[i]);
+	if (inv)
+	{
+		Renderer->PopMatrix();
+	}
 
-				Renderer->DrawTriangleList(ice.second);
-
-				Renderer->PopMatrix();
-			}
-		}
-
-		Renderer->PopProjectionMatrix();
-
-		Renderer->PopShader();
+	Renderer->PopShader();
 }
 
 void TAndroidApplication::DrawSnow()
@@ -252,7 +278,7 @@ void TAndroidApplication::DrawSnow()
 
 void TAndroidApplication::DrawAllScene(bool toScreen)
 {
-	glClearColor(0.f, 0.f, 0.f, 1.0f);
+	glClearColor(1.f, 0.f, 1.f, 1.0f);
 	//glClearColor(1.f, 1.f, 1.f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
@@ -378,21 +404,24 @@ void TAndroidApplication::InnerInit()
 	
 	CheckGlError();
 
-
-	boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi/32);
+	boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi / 32);
+	mCamera.MovePhi(pi/32);
 
 	
 	if (Renderer->GetScreenWidth() > Renderer->GetScreenHeight())
 	{
 		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(30.f);
+		mCamera.MoveDist(cameraDistance);
 	}
 
 	else
 	{
-		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(45.f);
+		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(30.f);
+		mCamera.MoveDist(cameraDistance);
 	}
 
 	boost::get<TPanoramicCamera>(Renderer->Camera).CalcCamVec();
+	mCamera.CalcCamVec();
 
 	CheckGlError();
 
@@ -400,7 +429,7 @@ void TAndroidApplication::InnerInit()
 
 	//ResourceManager->LightManager.SetLightDirection(Vector3f(1, -1, 0));
 
-	//AddFrameBuffers();
+	AddFrameBuffers();
 
 	//Renderer->SetPerspectiveFullScreenViewport();
 
@@ -450,13 +479,13 @@ void TAndroidApplication::InnerDraw()
 	m2.lock();
 	if (!Loaded)
 	{
-		glClearColor(0.f, 0.f, 0.f, 1.0f);
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["ScreenshotTexture"]);
-		Renderer->PushProjectionMatrix(1,1);
-		Renderer->LoadIdentity();
-		Renderer->DrawRect(Vector2f(0, 0), Vector2f(1.f, 1.f));
-		Renderer->PopProjectionMatrix();
+		//glClearColor(0.f, 0.f, 0.f, 1.0f);
+		//glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		//glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["ScreenshotTexture"]);
+		//Renderer->PushProjectionMatrix(1,1);
+		//Renderer->LoadIdentity();
+		//Renderer->DrawRect(Vector2f(0, 0), Vector2f(1.f, 1.f));
+		//Renderer->PopProjectionMatrix();
 		
 	}
 	else
@@ -467,15 +496,15 @@ void TAndroidApplication::InnerDraw()
 	
 	if (makeShot)
 	{
-		makeShot = false;
+		//makeShot = false;
 
-		Renderer->SwitchToFrameBuffer("ScreenshotFrame");
+		//Renderer->SwitchToFrameBuffer("ScreenshotFrame");
 
-		DrawAllScene(false);
+		//DrawAllScene(false);
 
-		ResourceManager->TexList.SaveTexDataToPlainBmpToUserData("file.bmp", ResourceManager->FrameManager.ReadFromBufferToTexData("ScreenshotFrame"));
+		//ResourceManager->TexList.SaveTexDataToPlainBmpToUserData("file.bmp", ResourceManager->FrameManager.ReadFromBufferToTexData("ScreenshotFrame"));
 
-		Renderer->SwitchToScreen();
+		//Renderer->SwitchToScreen();
 		
 	}
 	}
@@ -539,12 +568,13 @@ void TAndroidApplication::InnerUpdate(size_t dt)
 	
 }
 
-void TAndroidApplication::InnerOnMove(Vector2f shift)
+void TAndroidApplication::InnerOnMove(Vector2f pos, Vector2f shift)
 {
 
 	shift = Vector2f(shift[0]*Renderer->GetMatrixWidth()/static_cast<float>(Renderer->GetScreenWidth()), shift[1]*Renderer->GetMatrixHeight()/static_cast<float>(Renderer->GetScreenHeight()));
 	
-	boost::get<TPanoramicCamera>(Renderer->Camera).MoveAlpha(-pi*shift[0]*0.1f);
+	boost::get<TPanoramicCamera>(Renderer->Camera).MoveAlpha(-pi * shift[0] * 0.01f);
+	mCamera.MoveAlpha(-pi*shift[0]*0.01f);
 }
 
 void TAndroidApplication::OnMouseDown(TMouseState& mouseState)

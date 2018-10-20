@@ -50,7 +50,8 @@ public:
 	TRenderPair mountain;
 	Matrix4f mountainTransformation;
 
-	TRenderPair ice;
+	std::array<TTriangleList, 6> ices;
+	std::vector<TRenderParams> iceParams;
 	std::vector<Matrix4f> iceTransformations;
 
 	float WaterTimer;
@@ -69,7 +70,7 @@ public:
 	
 	 virtual void InnerUpdate(size_t dt);
 	 
-	 virtual void InnerOnMove(Vector2f shift);
+	 virtual void InnerOnMove(Vector2f pos, Vector2f shift) override;
 
 	 virtual void OnMouseDown(TMouseState& mouseState);
 
