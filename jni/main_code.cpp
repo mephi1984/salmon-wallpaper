@@ -95,6 +95,7 @@ void TAndroidApplication::LoadModels()
 	float radius = myMax(size[0], myMax(size[1], size[2])) / 2;
 
 	mountainTransformation = Affine3f(Scaling(cameraDistance / radius * 0.25f)).matrix();
+	//mountainTransformation = Affine3f(Translation3f(0, -size[1] / 20 * cameraDistance / radius * 0.25f, 0)).matrix() * mountainTransformation;
 	//Matrix3f rotation(Quaternionf(0, 1 * sin(pi / 8 + pi / 2), 0, 1 * cos(pi / 8 + pi / 2)).toRotationMatrix());
 	//mountainTransformation = Affine3f(rotation).matrix() * mountainTransformation;
 	//mountainTransformation = Affine3f(Translation3f(0, 0, -size[2] / 2.f)).matrix() * mountainTransformation;
@@ -133,6 +134,7 @@ void TAndroidApplication::LoadModels()
 		//Matrix3f rotation(Quaternionf(0, cos(angle*pi / 360.f), 0, sin(angle*pi / 360.f)).toRotationMatrix());
 		//iceTransformation = Affine3f(rotation).matrix() * iceTransformation;
 		iceTransformation = Affine3f(Translation3f(position)).matrix() * iceTransformation;
+		//iceTransformation = Affine3f(Translation3f(0, size[1] / 2, 0)).matrix() * iceTransformation;
 
 		iceTransformations.push_back(iceTransformation);
 	}
@@ -362,9 +364,9 @@ void TAndroidApplication::DrawAllScene(bool toScreen)
 	{
 		RenderUniform1f("WaterScale", 1.f);
 	}
-	glActiveTexture(GL_TEXTURE1);
+	glActiveTexture(GL_TEXTURE0); // THIS IS A NORMAL MAP (UNIFORM IS SETTED BY ENGINE IN Renderer->PushShader() -> SetUnifroms())
 	glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["water_nmap.png"]);
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE1); // THIS IS A COLOR MAP (UNIFORM IS SETTED BY ENGINE IN Renderer->PushShader() -> SetUnifroms())
 	if (toScreen)
 	{
 	Renderer->SetFullScreenViewport();
@@ -373,7 +375,11 @@ void TAndroidApplication::DrawAllScene(bool toScreen)
 	{
 		Renderer->SetFrameViewport("ScreenshotFrame");
 	}
+
 	Renderer->DrawFramePartScreen("WaterFrame", Vector2f(0, 0), Vector2f(1.f, 0.54f));
+
+	glActiveTexture(GL_TEXTURE0); // return back
+
 	Renderer->PopShader();
 
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -387,10 +393,10 @@ void TAndroidApplication::DrawAllScene(bool toScreen)
 
 	glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["snow.png"]);
 
-	if (SnowPref)
-	{
-		DrawSnow();
-	}
+	//if (SnowPref)
+	//{
+	//	DrawSnow();
+	//}
 
 	Renderer->PopShader();
 
@@ -446,8 +452,8 @@ void TAndroidApplication::InnerInit()
 	
 	CheckGlError();
 
-	boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi / 32);
-	mCamera.MovePhi(pi/32);
+	boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi / 360.f * 5);
+	mCamera.MovePhi(pi / 360.f * 5);
 
 	
 	if (Renderer->GetScreenWidth() > Renderer->GetScreenHeight())
@@ -471,7 +477,7 @@ void TAndroidApplication::InnerInit()
 
 	//ResourceManager->LightManager.SetLightDirection(Vector3f(1, -1, 0));
 
-	AddFrameBuffers();
+	//AddFrameBuffers();
 
 	//Renderer->SetPerspectiveFullScreenViewport();
 
