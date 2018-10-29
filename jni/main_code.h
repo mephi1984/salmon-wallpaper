@@ -24,7 +24,6 @@
 #include "boost/shared_ptr.hpp"
 #include "boost/thread/thread.hpp"
 #include "boost/asio.hpp"
-#include "boost/signal.hpp"
 #include "boost/assign.hpp"
 #include "boost/variant.hpp"
 #include "boost/function.hpp"

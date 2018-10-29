@@ -4,6 +4,7 @@ attribute vec3 Tangent;
 attribute vec3 Binormal;
 attribute vec2 vTexCoord;
 
+uniform mat4 ModelViewMatrix;
 uniform mat4 ProjectionMatrix;
 uniform vec3 CamPos;
 
@@ -29,5 +30,5 @@ void main()
 	
 	normVec = Normal;
 	
-	posVec = vPosition;
+	posVec = vPosition.xyz;
 }

@@ -5,6 +5,7 @@ uniform sampler2D NormalMap;
 uniform vec3 LightDirection;
 uniform float TimeOfDayCoef1;
 uniform float TimeOfDayCoef2;
+uniform float invCoef;
 uniform vec3 TimeOfDayColor;
 varying vec2 texCoord;
 
@@ -24,4 +25,10 @@ void main()
 	//gl_FragColor =  vec4(((texture2D(Texture, texCoord).rgb + vec3(0.0, 0.1, 0.2)) * (0.4)), 1.0);
 	
 	gl_FragColor =  vec4(((texture2D(Texture, texCoord).rgb + TimeOfDayColor) * (cosf * TimeOfDayCoef1 + TimeOfDayCoef2)), 1.0);
+	
+	if (posVec.y < 0.0)
+	{
+		discard;
+		//gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+	}
 }

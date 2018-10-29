@@ -96,7 +96,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../jni/;../../../boost_1_67_0;../../../eigen-3.3.4;../../../tes-engine;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../jni/;../../../boost_1_67_0;../../../eigen;../../../tes-engine;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <PreprocessorDefinitions>TARGET_WIN32;DEBUG;_WIN32_WINNT=0x0600;EIGEN_DONT_ALIGN_STATICALLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
@@ -114,7 +114,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../jni/;../../../boost_1_67_0;../../../eigen-3.3.4;../../../tes-engine;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../jni/;../../../boost_1_67_0;../../../eigen;../../../tes-engine;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Async</ExceptionHandling>
       <PreprocessorDefinitions>TARGET_WIN32;NDEBUG;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
