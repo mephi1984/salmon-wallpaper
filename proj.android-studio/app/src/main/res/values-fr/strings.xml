@@ -16,7 +16,7 @@
 		<item>Temps nuageux</item>
 		<item>Nuit</item>
 	</string-array>
-	
-	
+
+	<string name="text_feedback">Feedback</string>
 </resources>
 

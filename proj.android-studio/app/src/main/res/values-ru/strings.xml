@@ -17,7 +17,7 @@
 		<item>Облачный день</item>
 		<item>Ночь</item>
 	</string-array>
-	
 
+	<string name="text_feedback">Feedback</string>
 </resources>
 

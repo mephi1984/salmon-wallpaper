@@ -38,6 +38,7 @@
 		<item>1</item>
 		<item>2</item>
 	</string-array>
-	
+
+	<string name="text_feedback">Feedback</string>
 </resources>
 

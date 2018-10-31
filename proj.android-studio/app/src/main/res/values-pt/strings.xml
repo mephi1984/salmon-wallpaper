@@ -18,6 +18,6 @@
 		<item>Noite</item>
 	</string-array>
 
-	
+	<string name="text_feedback">Feedback</string>
 </resources>
 

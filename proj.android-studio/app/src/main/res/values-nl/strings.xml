@@ -16,7 +16,7 @@
 		<item>Bewolkte dag</item>
 		<item>Nacht</item>
 	</string-array>
-	
 
+	<string name="text_feedback">Feedback</string>
 </resources>
 

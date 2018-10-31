@@ -1,50 +1,35 @@
-# Sets the minimum version of CMake required to build the native
-# library. You should either keep the default value or only pass a
-# value of 3.4.0 or lower.
-
 cmake_minimum_required(VERSION 3.4.1)
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds it for you.
-# Gradle automatically packages shared libraries with your APK.
-
-
-add_definitions(-DTARGET_ANDROID)
-
-set(BOOST_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../boost_1_63_0)
-
+set(BOOST_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../boost_1_67_0)
 set(BOOST_GIL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/boost-gil-extension)
-
 set(ZIP_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/julienr-libzip-android/jni)
-
 set(LIBPNG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/libpng_1.4.1_android)
+set(LIBJPEG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/jpeg-9)
+set(EIGEN_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../eigen)
+set(SOL2_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../sol2)
+set(LUA_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/lua-5.3.4/src)
 
-set(LIBJPEG_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/jpeg-9")
-
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../engine)
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../tes-engine)
 include_directories(${BOOST_PATH})
+include_directories(${EIGEN_PATH})
+include_directories(${SOL2_PATH})
+include_directories(${LUA_PATH})
 include_directories(${LIBPNG_PATH})
 include_directories(${LIBJPEG_PATH})
 include_directories(${ZIP_PATH})
-
 include_directories(${BOOST_GIL_PATH})
 
-add_library( engine
-             SHARED
-             IMPORTED )
-			 
-set_target_properties( # Specifies the target library.
-                       engine
+add_definitions(-DTARGET_ANDROID)
 
-                       # Specifies the parameter you want to define.
-                       PROPERTIES IMPORTED_LOCATION
+add_library(engine SHARED IMPORTED
 
-                       # Provides the path to the library you want to import.
-                       ${CMAKE_CURRENT_SOURCE_DIR}/build/intermediates/exploded-aar/proj.android-studio/SalmonEngineAndroid/unspecified/jni/${ANDROID_ABI}/libengine.so )
-					   
+        )
+
+set_target_properties(engine PROPERTIES IMPORTED_LOCATION
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../tes-engine/SalmonEngineAndroid/app/build/intermediates/cmake/debug/obj/${ANDROID_ABI}/libengine.so
+
+        )
 
 
 
@@ -57,8 +42,8 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              # Associated headers in the same location as their source
              # file are automatically included.
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../game/android_api.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../game/main_code.cpp
+             ${CMAKE_CURRENT_SOURCE_DIR}/../../jni/android_api.cpp
+             ${CMAKE_CURRENT_SOURCE_DIR}/../../jni/main_code.cpp
              )
 			 
 			 

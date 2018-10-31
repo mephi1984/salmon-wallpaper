@@ -17,7 +17,7 @@
 		<item>Día nublado</item>
 		<item>Noche</item>
 	</string-array>
-	
-	
+
+	<string name="text_feedback">Feedback</string>
 </resources>
 

@@ -17,6 +17,7 @@
 		<item>Přeháňky den</item>
 		<item>Noc</item>
 	</string-array>
-	
+
+	<string name="text_feedback">Feedback</string>
 </resources>
 
