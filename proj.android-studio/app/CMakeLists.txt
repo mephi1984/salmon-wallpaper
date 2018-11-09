@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-set(BOOST_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../boost_1_67_0)
-set(BOOST_GIL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/boost-gil-extension)
+#set( CMAKE_CXX_STANDARD 17 )
+
+
+#add_definitions(-DEIGEN_HAS_CXX11_MATH=0)
+
+
+#set(BOOST_GIL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/boost-gil-extension)
+
+set(BOOST_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../boost_1_68_0)
 set(ZIP_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/julienr-libzip-android/jni)
 set(LIBPNG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/libpng_1.4.1_android)
 set(LIBJPEG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/jpeg-9)
@@ -9,15 +16,17 @@ set(EIGEN_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../eigen)
 set(SOL2_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../sol2)
 set(LUA_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/lua-5.3.4/src)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../tes-engine)
-include_directories(${BOOST_PATH})
+include_directories(${LIBJPEG_PATH}/vc10)
+include_directories(${LUA_PATH})
 include_directories(${EIGEN_PATH})
 include_directories(${SOL2_PATH})
-include_directories(${LUA_PATH})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../)
+include_directories(${BOOST_PATH})
 include_directories(${LIBPNG_PATH})
 include_directories(${LIBJPEG_PATH})
 include_directories(${ZIP_PATH})
 include_directories(${BOOST_GIL_PATH})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../tes-engine)
 
 add_definitions(-DTARGET_ANDROID)
 

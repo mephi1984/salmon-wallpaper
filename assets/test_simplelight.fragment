@@ -1,15 +1,15 @@
 precision lowp float;
 
 uniform sampler2D Texture;
-uniform sampler2D NormalMap;
+//uniform sampler2D NormalMap;
+
 uniform vec3 LightDirection;
 uniform float TimeOfDayCoef1;
 uniform float TimeOfDayCoef2;
-uniform float invCoef;
+//uniform float invCoef;
 uniform vec3 TimeOfDayColor;
-varying vec2 texCoord;
 
-varying vec3 camVec;
+varying vec2 texCoord;
 varying vec3 normVec;
 varying vec3 posVec;
 

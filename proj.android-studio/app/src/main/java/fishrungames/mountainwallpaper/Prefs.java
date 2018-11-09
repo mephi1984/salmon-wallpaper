@@ -31,17 +31,17 @@ public class Prefs extends PreferenceActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.prefliste);
 		addPreferencesFromResource(R.xml.preferences);
-		
-		
+
+
 		snowPref = (CheckBoxPreference)this.getPreferenceManager().findPreference("Snow");
 		timeOfDayPref = (ListPreference) findPreference("Timeofday");
-		
+
 		if (timeOfDayPref.getKey().compareToIgnoreCase("Timeofday") == 0)
 		{
 			JniWrapper.SetTimeOfDayPref(Integer.parseInt((String) timeOfDayPref.getValue()));
-			
+
 		}
-		
+
 		if (snowPref.getKey().compareToIgnoreCase("Snow") == 0) {
 			if (!snowPref.isChecked())
 			{
@@ -51,7 +51,7 @@ public class Prefs extends PreferenceActivity implements
 			{
 				JniWrapper.SetSnowPref(true);
 			}
-		}	
+		}
 
 	}
 

@@ -36,6 +36,8 @@ TPanoramicCamera mCamera;
 const float cameraDistance = 100.f;
 std::vector<int> iceIndexes;
 
+TRenderPair water;
+
 class LoadingQueueVisitor : public boost::static_visitor<void>
 {
 public:
@@ -249,7 +251,7 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 		Renderer->TranslateMatrix(Vector3f(0, 0.0f, 0));
 	}
 
-	
+
 
 	Renderer->PushShader("SimplelightShader");
 
@@ -265,7 +267,7 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 		RenderUniform1f("invCoef", 1.0f);
 		RenderUniform1f("extraSpace", 0.0f);
 	}
-	
+
 
 	Vector3f dayColor = Vector3f(0,0,0);
 	Vector3f nightColor = Vector3f(0, 0.1f, 0.2f);
@@ -290,7 +292,7 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 			RenderUniform1f("TimeOfDayCoef2", 0.4f);
 		}
 
-		
+
 	Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 450.f);
 	//Renderer->PushMatrix();
 	//mCamera.SetCamView();
@@ -351,70 +353,85 @@ void TAndroidApplication::DrawSnow()
 		Renderer->PopProjectionMatrix();
 }
 
-void TAndroidApplication::DrawAllScene(bool toScreen)
-{
-	//glClearColor(1.f, 0.f, 1.f, 1.0f);
-	glClearColor(0.9f, 0.9f, 1.f, 1.0f);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+void TAndroidApplication::DrawAllScene(bool toScreen) {
+    //glClearColor(1.f, 0.f, 1.f, 1.0f);
+    //glClearColor(0.9f, 0.9f, 1.f, 1.0f);
+    glClearColor(0.9f, 0.9f, 1.f, 1.0f);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-	Renderer->PushMatrix();
-	Renderer->SetGLCamView();
+    Renderer->PushMatrix();
+    Renderer->SetGLCamView();
 
-	Renderer->PushShader("ClipShader");
-
-
+    Renderer->PushShader("ClipShader");
 
 
-	Renderer->SwitchToFrameBuffer("WaterFrame");
-	Renderer->SetGLCamView();
-	Renderer->ScaleMatrix(Vector3f(1, -1, 1));
+    Renderer->SwitchToFrameBuffer("WaterFrame");
+    Renderer->SetGLCamView();
+    Renderer->ScaleMatrix(Vector3f(1, -1, 1));
 
 
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-	DrawSceneWithoutWater(true);
+    DrawSceneWithoutWater(true);
 
-	Renderer->ScaleMatrix(Vector3f(1, -1, 1));
+    Renderer->ScaleMatrix(Vector3f(1, -1, 1));
 
-	if (toScreen)
-	{
-		Renderer->SwitchToScreen();
-	}
-	else
-	{
-		Renderer->SwitchToFrameBuffer("ScreenshotFrame");
-	}
+    if (toScreen) {
+        Renderer->SwitchToScreen();
+    } else {
+        Renderer->SwitchToFrameBuffer("ScreenshotFrame");
+    }
 
-	Renderer->SetGLCamView();
-	
-	Renderer->PushShader("NormShader");
-	RenderUniform1f("Time", WaterTimer);
-	if (Renderer->GetScreenWidth() < 600)
-	{
-		RenderUniform1f("WaterScale", 0.7f);
-	}
-	else
-	{
-		RenderUniform1f("WaterScale", 1.f);
-	}
-	glActiveTexture(GL_TEXTURE0); // THIS IS A NORMAL MAP (UNIFORM IS SETTED BY ENGINE IN Renderer->PushShader() -> SetUnifroms())
-	glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["water_nmap.png"]);
-	glActiveTexture(GL_TEXTURE1); // THIS IS A COLOR MAP (UNIFORM IS SETTED BY ENGINE IN Renderer->PushShader() -> SetUnifroms())
-	if (toScreen)
-	{
-		Renderer->SetFullScreenViewport();
-	}
-	else
-	{
-		Renderer->SetFrameViewport("ScreenshotFrame");
-	}
+    Renderer->SetGLCamView();
 
-	Renderer->DrawFramePartScreen("WaterFrame", Vector2f(0, 0), Vector2f(1.f, 0.55f));
+    {
+        Renderer->PushShader("NormShader");
+
+        RenderUniform1f("Time", WaterTimer);
+
+        if (Renderer->GetScreenWidth() < 600)
+        {
+            RenderUniform1f("WaterScale", 0.7f);
+        }
+        else
+        {
+            RenderUniform1f("WaterScale", 1.f);
+        }
+
+//        glActiveTexture(GL_TEXTURE0); // THIS IS A NORMAL MAP (UNIFORM IS SETTED BY ENGINE IN Renderer->PushShader() -> SetUnifroms())
+//        glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["water_nmap.png"]);
+//        glActiveTexture(GL_TEXTURE1); // THIS IS A COLOR MAP (UNIFORM IS SETTED BY ENGINE IN Renderer->PushShader() -> SetUnifroms())
+
+        if (toScreen)
+        {
+            Renderer->SetFullScreenViewport();
+        }
+        else
+        {
+            Renderer->SetFrameViewport("ScreenshotFrame");
+        }
+
+//        size_t texID = ResourceManager->FrameManager.GetFrameTexture("WaterFrame");
+//
+//        if (texID != 0)
+//        {
+            Renderer->PushProjectionMatrix(1, 1);
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            Renderer->LoadIdentity();
+//            glBindTexture(GL_TEXTURE_2D, texID);
+
+            TRenderParamsSetter setter(water.first);
+            Renderer->DrawTriangleList(water.second);
+
+            Renderer->PopProjectionMatrix();
+        //}
+
+        Renderer->PopShader();
+    }
 
 	glActiveTexture(GL_TEXTURE0); // return back
 
-	Renderer->PopShader();
-	
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -448,7 +465,7 @@ void TAndroidApplication::InnerInit()
 	GetConsole() << "Inner init go!\n";
 
 #ifdef TARGET_ANDROID
-	ResourceManager->PathToResources = "";
+	ST::PathToResources = "";
 #endif
 #ifdef TARGET_WIN32
 	ST::PathToResources = "../../assets/";
@@ -486,6 +503,10 @@ void TAndroidApplication::InnerInit()
 	
 	CheckGlError();
 
+    water.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "WaterFrame";
+    water.first.SamplerMap[CONST_STRING_NORMALMAP_UNIFORM] = "water_nmap.png";
+    water.second.Data = MakeDataTriangleList(Vector2f(0, 0), Vector2f(1.f, 0.55f), Vector4f(1, 1, 1, 1), 0, Vector2f(0, 0), Vector2f(1.f, 0.55f));
+
 	boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi / 360.f * 5);
 	mCamera.MovePhi(pi / 360.f * 5);
 	
@@ -522,7 +543,7 @@ void TAndroidApplication::InnerInit()
 	
 	Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 400.f);
 
-	GetConsole()<<"Inner init end!\n";
+    GetConsole() << "Inner init end!\n";
 
 	m2.unlock();
 }

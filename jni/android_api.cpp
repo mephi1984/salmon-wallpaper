@@ -26,13 +26,15 @@ JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetSnowPre
 
 JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_Init(JNIEnv * env, jobject obj,  jint width, jint height)
 {
+    auto app = JniInitApp<TAndroidApplication>(width, height, 800.f, 480.f);
 
-	Application = JniInitApp<TAndroidApplication>(width, height, 800.f, 480.f);
-	
-	boost::get<TPanoramicCamera>(Renderer->Camera).SetAlpha((lastOffsetX) * pi / 180.f);
-	Application->SkyTexShift = lastOffsetX*0.01f;
-	
-	
+    if (app)
+    {
+        Application = app;
+    }
+
+    boost::get<TPanoramicCamera>(Renderer->Camera).SetAlpha((lastOffsetX) * pi / 180.f);
+    Application->SkyTexShift = lastOffsetX*0.01f;
 }
 
 

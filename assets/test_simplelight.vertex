@@ -1,15 +1,11 @@
 attribute vec3 vPosition;
 attribute vec3 Normal;
-attribute vec3 Tangent;
-attribute vec3 Binormal;
 attribute vec2 vTexCoord;
 
-uniform mat4 ModelViewMatrix;
+//uniform mat4 ModelViewMatrix;
 uniform mat4 ProjectionMatrix;
-uniform vec3 CamPos;
 
 varying vec2 texCoord;
-varying vec3 camVec;
 varying vec3 normVec;
 varying vec3 posVec;
 
@@ -18,15 +14,6 @@ void main()
 	//480x320
 	gl_Position = ProjectionMatrix * vec4(vPosition.xyz, 1.0);
 	texCoord = vTexCoord;
-	
-	vec3 cVec = (CamPos - vPosition.xyz);
-	
-	mat3 rot;
-	rot[0] = Tangent;
-	rot[1] = Binormal;
-	rot[2] = Normal;
-	
-	camVec =  cVec * rot;
 	
 	normVec = Normal;
 	

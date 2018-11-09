@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
-<RelativeLayout android:id="@+id/LinearLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent"><ImageView android:id="@+id/ImageView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_alignParentLeft="true" android:layout_marginLeft="3dp"></ImageView>
-</RelativeLayout>
-<ListView android:layout_width="fill_parent" android:id="@+id/android_list" android:layout_height="wrap_content"></ListView>
-<TextView android:layout_width="fill_parent" android:id="@+id/android_text_feedback" android:padding="20px" android:text="@string/feedback" android:layout_height="wrap_content"></TextView>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
+
+    <RelativeLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="3dp">
+        </ImageView>
+
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:id="@android:id/list"
+        android:layout_height="wrap_content">
+    </ListView>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:id="@+id/android_text_feedback"
+        android:padding="20px"
+        android:text="@string/feedback"
+        android:layout_height="wrap_content">
+    </TextView>
 
 </LinearLayout>
