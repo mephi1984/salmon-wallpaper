@@ -1,41 +1,90 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2014 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
 
 <manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="fishrungames.mountainwallpaper"
-	android:versionCode="1"
-	android:versionName="1.0.0">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="fishrungames.mountainwallpaper">
 
-	<uses-feature
-		android:glEsVersion="0x00020000"
-		android:required="true"/>
+    <uses-feature
+        android:name="android.software.live_wallpaper"
+        android:required="true"/>
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
 
-	<application
-		android:label="@string/app_name"
-		android:icon="@drawable/icon" >
+    <!-- <uses-permission android:name="android.permission.WAKE_LOCK"/> -->
 
-		<activity
-			android:name=".Prefs">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
+    <!-- Don't request this starting with Marshmallow (we only write to the app's cache folder) -->
+    <!-- <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="22"/>-->
 
-		<service
-			android:name=".MountainWallpaperService"
-			android:icon="@drawable/icon"
-			android:label="@string/app_name"
-			android:permission="android.permission.BIND_WALLPAPER">
-			<intent-filter android:priority="1">
-				<action android:name="android.service.wallpaper.WallpaperService" />
-			</intent-filter>
-			<meta-data
-				android:name="android.service.wallpaper"
-				android:resource="@xml/wallpaper"/>
-		</service>
+    <application
+        android:supportsRtl="true"
+        android:label="@string/app_name"
+        android:icon="@drawable/icon"
+        android:allowBackup="false">
+        <!--tools:ignore="GoogleAppIndexingWarning"-->
 
-	</application>
+        <!-- Needed to support long aspect ratio devices as Muzei has resizeableActivity="false" -->
+        <!-- <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1"/>-->
+        <!--android:theme="@style/Theme.MuzeiActivity"-->
+        <!--android:resizeableActivity="false"-->
 
+        <activity
+            android:name=".WallpaperPreferences"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES"/>-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <!--android:directBootAware="true"-->
+        <!--tools:targetApi="n"-->
+
+        <service
+            android:name=".MountainWallpaper"
+            android:permission="android.permission.BIND_WALLPAPER"
+            android:icon="@drawable/icon"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper"/>
+        </service>
+
+        <!--<activity-alias-->
+            <!--android:name="com.google.android.apps.muzei.settings.NotificationSettings"-->
+            <!--android:targetActivity="com.google.android.apps.muzei.WallpaperPreferences"-->
+            <!--android:enabled="@bool/enable_notification_settings">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+                <!--<category android:name="android.intent.category.NOTIFICATION_PREFERENCES"/>-->
+            <!--</intent-filter>-->
+        <!--</activity-alias>-->
+
+    </application>
 </manifest>
