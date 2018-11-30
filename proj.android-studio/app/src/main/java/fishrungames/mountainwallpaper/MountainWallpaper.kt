@@ -24,6 +24,9 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import fishrungames.salmonengineandroid.EngineWrapper
+import android.content.SharedPreferences
+
+
 
 class MountainWallpaper : GLWallpaperService(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -54,6 +57,10 @@ class MountainWallpaper : GLWallpaperService(), SharedPreferences.OnSharedPrefer
         apkFilePath = appInfo!!.sourceDir
 
         EngineWrapper.SetupApkFilePath(apkFilePath)
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        JniWrapper.SetTimeOfDayPref(Integer.parseInt(prefs.getString("Timeofday", "0")!!))
+        JniWrapper.SetSnowPref(prefs.getBoolean("Snow", false))
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {

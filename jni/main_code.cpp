@@ -541,14 +541,23 @@ void TAndroidApplication::InnerInit()
 		Renderer->SetMatrixHeight(800);
 	}
 	
-	Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 400.f);
+	Renderer->SetPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 400.f);
 
     GetConsole() << "Inner init end!\n";
 
 	m2.unlock();
 }
 
+void TAndroidApplication::InnerReinitGLResources()
+{
+	if (Renderer->GetScreenWidth() < Renderer->GetScreenHeight())
+	{
+		Renderer->SetMatrixWidth(480);
+		Renderer->SetMatrixHeight(800);
+	}
 
+	Renderer->SetPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 400.f);
+}
 
 void TAndroidApplication::InnerDeinit()
 {

@@ -18,6 +18,14 @@
 		<item>Ночь</item>
 	</string-array>
 
+
+	<string-array name="timeofday_value">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+
 	<string name="text_feedback">Feedback</string>
+	<string name="button_set_wallpaper_text">Установить обои</string>
 </resources>
 

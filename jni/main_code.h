@@ -62,6 +62,7 @@ public:
 	TAndroidApplication();
 	
      virtual void InnerInit();
+     void InnerReinitGLResources() override;
     
      virtual void InnerDeinit();
 	
