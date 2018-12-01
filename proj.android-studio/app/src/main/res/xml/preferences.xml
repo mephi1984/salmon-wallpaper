@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen android:title="Main"
-	xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 	
 	<ListPreference
 			android:key="Timeofday" android:summary="@string/p_stimeofday"
 			android:title="@string/p_timeofday" android:entries="@array/timeofday_id"
 			android:entryValues="@array/timeofday_value" android:defaultValue="0"
-			android:background="#00ff00"
+			app:iconSpaceReserved="false"
 		/>
 	<CheckBoxPreference android:summaryOn="@string/p_snow_on"
 			android:key="Snow" android:title="@string/p_snow"
 			android:summaryOff="@string/p_snow_off" android:defaultValue="false"
-			android:background="#0000ff"
+			app:iconSpaceReserved="false"
 		/>
 
 </PreferenceScreen>
