@@ -624,13 +624,13 @@ void TAndroidApplication::InnerDraw()
 	m2.lock();
 	if (!Loaded)
 	{
-		//glClearColor(0.f, 0.f, 0.f, 1.0f);
-		//glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		//glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["ScreenshotTexture"]);
-		//Renderer->PushProjectionMatrix(1,1);
-		//Renderer->LoadIdentity();
-		//Renderer->DrawRect(Vector2f(0, 0), Vector2f(1.f, 1.f));
-		//Renderer->PopProjectionMatrix();
+		glClearColor(0.f, 0.f, 0.f, 1.0f);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["ScreenshotTexture"]);
+		Renderer->PushProjectionMatrix(1,1);
+		Renderer->LoadIdentity();
+		Renderer->DrawRect(Vector2f(0, 0), Vector2f(1.f, 1.f));
+		Renderer->PopProjectionMatrix();
 		
 	}
 	else
@@ -641,15 +641,15 @@ void TAndroidApplication::InnerDraw()
 	
 	if (makeShot)
 	{
-		//makeShot = false;
+		makeShot = false;
 
-		//Renderer->SwitchToFrameBuffer("ScreenshotFrame");
+		Renderer->SwitchToFrameBuffer("ScreenshotFrame");
 
-		//DrawAllScene(false);
+		DrawAllScene(false);
 
-		//ResourceManager->TexList.SaveTexDataToPlainBmpToUserData("file.bmp", ResourceManager->FrameManager.ReadFromBufferToTexData("ScreenshotFrame"));
+		ResourceManager->TexList.SaveTexDataToPlainBmpToUserData("file.bmp", ResourceManager->FrameManager.ReadFromBufferToTexData("ScreenshotFrame"));
 
-		//Renderer->SwitchToScreen();
+		Renderer->SwitchToScreen();
 		
 	}
 	}
