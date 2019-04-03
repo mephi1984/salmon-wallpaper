@@ -123,7 +123,7 @@ class MountainWallpaper : GLWallpaperService(), SharedPreferences.OnSharedPrefer
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset,
                     yPixelOffset)
 
-            JniWrapper.SetOffset(xPixelOffset * xOffsetStep, yPixelOffset * yOffsetStep)
+            JniWrapper.SetOffset(xOffset, 0.0f)
         }
 
         override fun onTouchEvent(event: MotionEvent) {

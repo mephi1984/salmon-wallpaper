@@ -16,10 +16,8 @@ void main()
 	float len = length(camVec);
 	float squeeze = 0.5*(len / CamPos.y );
 	
-	squeeze = min(squeeze, 4.0);
-	
-	//if (squeeze>15.0) squeeze = 15.0;
-	
+	squeeze = min(squeeze, 8.0);
+
 	vec3 v3 = vec3(0.0,1.0,0.0);
 	vec3 v2 = vec3(1.0,0.0,0.0);
 	vec3 v1 = vec3(0.0,0.0,1.0);
@@ -37,8 +35,7 @@ void main()
 	
 	NVec1 = (NVec1 -0.5) * 2.0;
 	NVec2 = (NVec2 -0.5) * 2.0;
-	
-	
+
 	vec3 NVec = 0.5*NVec1 + 0.5*NVec2;
 	NVec = rot * NVec;
 	
@@ -46,11 +43,12 @@ void main()
 	
 	d = min(d, 2.0);
 	
-	localTexCoord.x = max(min(localTexCoord.x + d * NVec.x, 1.0), 0.0);
-	localTexCoord.y = max(min(localTexCoord.y - d * NVec.z, 1.0), 0.0);
+	localTexCoord.x = max(min(localTexCoord.x + 0.05*d * NVec.x, 1.0), 0.0);
+	localTexCoord.y = max(min(localTexCoord.y - 0.05*d * NVec.z, 1.0), 0.0);
 	
 	vec4 specular = vec4(0.8, 0.8, 0.8, 1.0)* (1.0-pow(max(dot(vec3(0.0,1.0,0.0), normalize(NVec)),0.0),2.0));
 	
 
 	gl_FragColor =  texture2D(Texture, localTexCoord).rgba + specular + vec4(0.0, 0.05, 0.1, 0.0);
+	//gl_FragColor =  texture2D(Texture, texCoord).rgba;
 }

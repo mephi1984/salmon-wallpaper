@@ -167,6 +167,19 @@ open class GLWallpaperService : WallpaperService() {
                 throw IllegalStateException("setRenderer has already been called for this instance.")
             }
         }
+
+        override fun onOffsetsChanged(
+                xOffset: Float,
+                yOffset: Float,
+                xOffsetStep: Float,
+                yOffsetStep: Float,
+                xPixelOffset: Int,
+                yPixelOffset: Int
+        ) {
+            //Log.d(TAG, "onOffsetsChanged reattach =$xOffset $yOffset $xOffsetStep $yOffsetStep $xPixelOffset $yPixelOffset")
+            super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset,
+                    yPixelOffset)
+        }
     }
 }
 

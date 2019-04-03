@@ -19,5 +19,6 @@
 	</string-array>
 
 	<string name="text_feedback">Feedback</string>
+	<string name="button_set_wallpaper_text">Instalar papel tapiz</string>
 </resources>
 

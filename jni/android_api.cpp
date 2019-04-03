@@ -15,6 +15,8 @@ bool SnowPref = false;
 
 bool OffsetChanged = false;
 
+extern TPanoramicCamera mCamera;
+
 JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetTimeOfDayPref(JNIEnv * env, jobject obj, jint timeofday)
 {
 	TimeOfDayPref = timeofday;
@@ -41,11 +43,12 @@ JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_Init(JNIEn
 JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetOffset(JNIEnv * env, jobject obj, jfloat offsetX, jfloat offsetY)
 {
 
-	if (Renderer != NULL)
+	if (Renderer != NULL && Application != nullptr)
 	{
 		OffsetChanged = true;
-		Application->SkyTexShift = offsetX*0.01f;
+		Application->SkyTexShift = offsetX;
 		lastOffsetX = offsetX;
-		boost::get<TPanoramicCamera>(Renderer->Camera).SetAlpha((lastOffsetX) * pi / 180.f);
+		boost::get<TPanoramicCamera>(Renderer->Camera).SetAlpha((-lastOffsetX) * pi);
+        mCamera.SetAlpha((-lastOffsetX) * pi);
 	}
 }

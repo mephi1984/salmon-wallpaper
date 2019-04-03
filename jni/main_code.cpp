@@ -17,15 +17,18 @@ bool makeShot = true;
 extern int TimeOfDayPref;
 extern bool SnowPref;
 
-extern float lastOffsetX;
+
 
 #ifdef TARGET_WIN32
 int TimeOfDayPref =	0;
-bool SnowPref = true;
-
+bool SnowPref = false;
+float lastOffsetX = 0.f;
 #else
 extern int TimeOfDayPref;
 extern bool SnowPref;
+extern bool OffsetChanged;
+
+extern float lastOffsetX;
 
 #endif
 
@@ -33,7 +36,8 @@ extern bool SnowPref;
 boost::mutex m2;
 
 TPanoramicCamera mCamera;
-const float cameraDistance = 100.f;
+TPanoramicCamera mInvCamera;
+const float cameraDistance = 200.f;
 std::vector<int> iceIndexes;
 
 TRenderPair water;
@@ -98,11 +102,14 @@ void TAndroidApplication::LoadModels()
 
 	SE::MoveDataTriangleList(mountain.second.Data, Vector3f(0, -10.0, 0));
 
+    SE::ScaleDataTriangleList(mountain.second.Data, 0.5f);
+
+
 	mountain.second.RefreshBuffer();
 
 
 	mountainTransformation = Affine3f(Scaling(cameraDistance / radius * 0.5f)).matrix();
-	//mountainTransformation = Affine3f(Translation3f(0, -size[1] * 0.02f, 0)).matrix() * mountainTransformation;
+	//mountainTransformation = Affine3f(Translation3f(0, 0.02f, 0)).matrix() * mountainTransformation;
 
 	//mountainTransformation = Affine3f(Translation3f(0, -size[1] / 20 * cameraDistance / radius * 0.25f, 0)).matrix() * mountainTransformation;
 	//Matrix3f rotation(Quaternionf(0, 1 * sin(pi / 8 + pi / 2), 0, 1 * cos(pi / 8 + pi / 2)).toRotationMatrix());
@@ -186,7 +193,13 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 		{
 			glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList["sky.png"]);
 		}
+
+		
 		Renderer->DrawRect(Vector2f(0.0f, 0.55f), Vector2f(1.f, 0.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
+
+		//Because there is some texture distortion, we add sky at the bottom also
+		Renderer->DrawRect(Vector2f(0.0f, 0.55f), Vector2f(1.f, 1.f), Vector2f(0.5f + SkyTexShift, 0.f), Vector2f(1.f + SkyTexShift, 1.f));
+
 
 		if (TimeOfDayPref == 1)
 		{
@@ -294,8 +307,15 @@ void TAndroidApplication::DrawSceneWithoutWater(bool inv)
 
 
 	Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 450.f);
-	//Renderer->PushMatrix();
-	//mCamera.SetCamView();
+	
+	if (inv)
+	{
+		mInvCamera.SetCamView();
+	}
+	else
+	{
+		mCamera.SetCamView();
+	}
 
 	{
 		Renderer->PushMatrix();
@@ -364,7 +384,7 @@ void TAndroidApplication::DrawAllScene(bool toScreen) {
 
     Renderer->PushShader("ClipShader");
 
-
+	
     Renderer->SwitchToFrameBuffer("WaterFrame");
     Renderer->SetGLCamView();
     Renderer->ScaleMatrix(Vector3f(1, -1, 1));
@@ -382,8 +402,9 @@ void TAndroidApplication::DrawAllScene(bool toScreen) {
         Renderer->SwitchToFrameBuffer("ScreenshotFrame");
     }
 
-    Renderer->SetGLCamView();
-
+    //Renderer->SetGLCamView();
+	mCamera.SetCamView();
+	
     {
         Renderer->PushShader("NormShader");
 
@@ -391,11 +412,13 @@ void TAndroidApplication::DrawAllScene(bool toScreen) {
 
         if (Renderer->GetScreenWidth() < 600)
         {
-            RenderUniform1f("WaterScale", 0.7f);
+            //RenderUniform1f("WaterScale", 0.7f);
+			RenderUniform1f("WaterScale", 7.0f);
         }
         else
         {
-            RenderUniform1f("WaterScale", 1.f);
+			//RenderUniform1f("WaterScale", 1.f);
+			RenderUniform1f("WaterScale", 1.0f);
         }
 
 //        glActiveTexture(GL_TEXTURE0); // THIS IS A NORMAL MAP (UNIFORM IS SETTED BY ENGINE IN Renderer->PushShader() -> SetUnifroms())
@@ -435,7 +458,9 @@ void TAndroidApplication::DrawAllScene(bool toScreen) {
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	Renderer->SetGLCamView();
+	//Renderer->LoadIdentity();
+	//mCamera.SetCamView();
+	//Renderer->SetGLCamView();
 
 
 	DrawSceneWithoutWater(false);
@@ -507,23 +532,32 @@ void TAndroidApplication::InnerInit()
     water.first.SamplerMap[CONST_STRING_NORMALMAP_UNIFORM] = "water_nmap.png";
     water.second.Data = MakeDataTriangleList(Vector2f(0, 0), Vector2f(1.f, 0.55f), Vector4f(1, 1, 1, 1), 0, Vector2f(0, 0), Vector2f(1.f, 0.55f));
 
-	boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi / 360.f * 5);
+	water.second.RefreshBuffer();
+	//boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi / 360.f * 5);
 	mCamera.MovePhi(pi / 360.f * 5);
+	mInvCamera.MovePhi(-pi / 360.f * 5);
+	//mCamera.MovePhi(0);
 	
 	if (Renderer->GetScreenWidth() > Renderer->GetScreenHeight())
 	{
-		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(150.f);
+		//boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(150.f);
 		mCamera.MoveDist(cameraDistance);
+		mInvCamera.MoveDist(cameraDistance);
 	}
 
 	else
 	{
-		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(150.f);
+		//boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(150.f);
 		mCamera.MoveDist(cameraDistance);
+		mInvCamera.MoveDist(cameraDistance);
 	}
 
-	boost::get<TPanoramicCamera>(Renderer->Camera).CalcCamVec();
+    mCamera.SetAlpha((-lastOffsetX) * pi);
+	mInvCamera.SetAlpha((-lastOffsetX) * pi);
+
+	//boost::get<TPanoramicCamera>(Renderer->Camera).CalcCamVec();
 	mCamera.CalcCamVec();
+	mInvCamera.CalcCamVec();
 
 	CheckGlError();
 
@@ -640,8 +674,12 @@ void TAndroidApplication::InnerUpdate(size_t dt)
 	}
 	else
 	{
-
-
+/*
+		if (OffsetChanged)
+		{
+			OffsetChanged = false;
+			boost::get<TPanoramicCamera>(Renderer->Camera).CalcCamVec();
+		}*/
 	if (WaveDir)
 	{
 		WaterTimer += dt/1000.f;
@@ -684,8 +722,9 @@ void TAndroidApplication::InnerOnMove(Vector2f pos, Vector2f shift)
 
 	shift = Vector2f(shift[0]*Renderer->GetMatrixWidth()/static_cast<float>(Renderer->GetScreenWidth()), shift[1]*Renderer->GetMatrixHeight()/static_cast<float>(Renderer->GetScreenHeight()));
 	
-	boost::get<TPanoramicCamera>(Renderer->Camera).MoveAlpha(-pi * shift[0] * 0.01f);
+	//boost::get<TPanoramicCamera>(Renderer->Camera).MoveAlpha(-pi * shift[0] * 0.01f);
 	mCamera.MoveAlpha(-pi*shift[0]*0.01f);
+	mInvCamera.MoveAlpha(-pi * shift[0] * 0.01f);
 }
 
 void TAndroidApplication::OnMouseDown(TMouseState& mouseState)
