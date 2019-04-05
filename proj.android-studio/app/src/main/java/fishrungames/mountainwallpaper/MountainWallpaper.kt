@@ -25,7 +25,7 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import fishrungames.salmonengineandroid.EngineWrapper
 import android.content.SharedPreferences
-
+import android.util.Log
 
 
 class MountainWallpaper : GLWallpaperService(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -33,7 +33,6 @@ class MountainWallpaper : GLWallpaperService(), SharedPreferences.OnSharedPrefer
     init
     {
         EngineWrapper.LoadSalmonEngineLibrary();
-        //JniWrapper.LoadLibrary();
     }
 
     override fun onCreate() {
@@ -43,6 +42,8 @@ class MountainWallpaper : GLWallpaperService(), SharedPreferences.OnSharedPrefer
 
         EngineWrapper.SetActivityInstance(this)
         EngineWrapper.SetupEnviroment()
+
+        Log.v("WallpaperRenderer", "EngineWrapper.GetApplicationDir() = " + EngineWrapper.GetApplicationDir());
 
         var apkFilePath: String? = null
         var appInfo: ApplicationInfo? = null
@@ -102,11 +103,11 @@ class MountainWallpaper : GLWallpaperService(), SharedPreferences.OnSharedPrefer
             super.onCreate(surfaceHolder)
 
             setEGLContextClientVersion(2)
+
+            Log.v("MountainWallpaper", "onCreate")
             setRenderer(WallpaperRenderer())
             renderMode = RENDERMODE_CONTINUOUSLY
             requestRender()
-
-            // Use the MuzeiWallpaperService's lifecycle to wait for the user to unlock
 
             setTouchEventsEnabled(true)
             setOffsetNotificationsEnabled(true)

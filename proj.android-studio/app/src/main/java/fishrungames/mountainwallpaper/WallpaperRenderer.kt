@@ -34,7 +34,17 @@ class WallpaperRenderer() : GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
-        JniWrapper.Init(width, height)
+
+        Log.v("WallpaperRenderer", "onSurfaceChanged")
+        try {
+            JniWrapper.Init(width, height)
+        }
+        catch (t: Throwable) {
+
+            t.printStackTrace()
+            System.out.println("Exception occurred");
+        }
+        Log.v("WallpaperRenderer", "onSurfaceChanged2")
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -43,6 +53,8 @@ class WallpaperRenderer() : GLSurfaceView.Renderer {
         {
             lastTimeStamp = currentTimeStamp
         }
+
+        Log.v("WallpaperRenderer", "onDrawFrame")
 
         EngineWrapper.Update(currentTimeStamp - lastTimeStamp)
 

@@ -35,8 +35,8 @@ add_library(engine SHARED IMPORTED
 
 set_target_properties(engine PROPERTIES IMPORTED_LOCATION
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../../tes-engine/SalmonEngineAndroid/app/build/intermediates/cmake/debug/obj/${ANDROID_ABI}/libengine.so
-        #${CMAKE_CURRENT_SOURCE_DIR}/../../../tes-engine/SalmonEngineAndroid/app/build/intermediates/cmake/release/obj/${ANDROID_ABI}/libengine.so
+        #${CMAKE_CURRENT_SOURCE_DIR}/../../../tes-engine/SalmonEngineAndroid/app/build/intermediates/cmake/debug/obj/${ANDROID_ABI}/libengine.so
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../tes-engine/SalmonEngineAndroid/app/build/intermediates/cmake/release/obj/${ANDROID_ABI}/libengine.so
 
         )
 

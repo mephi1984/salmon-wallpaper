@@ -14,4 +14,5 @@ class JniWrapper
 	public static native void Init(int width, int height);
 
 	public static native void SetOffset(float offsetX, float offsetY);
+
 }
