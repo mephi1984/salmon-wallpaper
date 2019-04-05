@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fishrungames.mountainwallpaper
+package fishrungames.reflectedmountain
 
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fishrungames.mountainwallpaper
+package fishrungames.reflectedmountain
 
 import java.io.Writer
 import java.util.ArrayList

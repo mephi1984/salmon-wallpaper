@@ -1,4 +1,4 @@
-package fishrungames.mountainwallpaper;
+package fishrungames.reflectedmountain;
 
 class JniWrapper
 {

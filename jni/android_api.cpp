@@ -18,11 +18,11 @@ bool OffsetChanged = false;
 extern TPanoramicCamera mCamera;
 extern TPanoramicCamera mInvCamera;
 
-JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetTimeOfDayPref(JNIEnv * env, jobject obj, jint timeofday)
+JNIEXPORT void JNICALL Java_fishrungames_reflectedmountain_JniWrapper_SetTimeOfDayPref(JNIEnv * env, jobject obj, jint timeofday)
 {
 	TimeOfDayPref = timeofday;
 }
-JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetSnowPref(JNIEnv * env, jobject obj, jboolean snow)
+JNIEXPORT void JNICALL Java_fishrungames_reflectedmountain_JniWrapper_SetSnowPref(JNIEnv * env, jobject obj, jboolean snow)
 {
 	SnowPref = snow;
 }
@@ -33,7 +33,7 @@ namespace SE {
     std::string testSomethingOut2(int v);
 }*/
 
-JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_Init(JNIEnv * env, jobject obj,  jint width, jint height)
+JNIEXPORT void JNICALL Java_fishrungames_reflectedmountain_JniWrapper_Init(JNIEnv * env, jobject obj,  jint width, jint height)
 {
 /*
     __android_log_print(ANDROID_LOG_VERBOSE, "SalmonWallpaper", "FRG Java_fishrungames_mountainwallpaper_JniWrapper_Init-");
@@ -65,7 +65,7 @@ JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_Init(JNIEn
 }
 
 
-JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetOffset(JNIEnv * env, jobject obj, jfloat offsetX, jfloat offsetY)
+JNIEXPORT void JNICALL Java_fishrungames_reflectedmountain_JniWrapper_SetOffset(JNIEnv * env, jobject obj, jfloat offsetX, jfloat offsetY)
 {
 
 	if (Renderer != NULL && Application != nullptr)

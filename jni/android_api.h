@@ -16,13 +16,13 @@ using namespace SE;
 
 extern "C" {
 
-	JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetTimeOfDayPref(JNIEnv * env, jobject obj, jint timeofday);
+	JNIEXPORT void JNICALL Java_fishrungames_reflectedmountain_JniWrapper_SetTimeOfDayPref(JNIEnv * env, jobject obj, jint timeofday);
 	
-	JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetSnowPref(JNIEnv * env, jobject obj, jboolean snow);
+	JNIEXPORT void JNICALL Java_fishrungames_reflectedmountain_JniWrapper_SetSnowPref(JNIEnv * env, jobject obj, jboolean snow);
 	
-	JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_Init(JNIEnv * env, jobject obj,  jint width, jint height);
+	JNIEXPORT void JNICALL Java_fishrungames_reflectedmountain_JniWrapper_Init(JNIEnv * env, jobject obj,  jint width, jint height);
     
-	JNIEXPORT void JNICALL Java_fishrungames_mountainwallpaper_JniWrapper_SetOffset(JNIEnv * env, jobject obj, jfloat offsetX, jfloat offsetY);
+	JNIEXPORT void JNICALL Java_fishrungames_reflectedmountain_JniWrapper_SetOffset(JNIEnv * env, jobject obj, jfloat offsetX, jfloat offsetY);
 
 	};
 

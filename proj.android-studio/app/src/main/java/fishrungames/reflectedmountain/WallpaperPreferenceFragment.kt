@@ -1,4 +1,4 @@
-package fishrungames.mountainwallpaper
+package fishrungames.reflectedmountain
 
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.os.Bundle

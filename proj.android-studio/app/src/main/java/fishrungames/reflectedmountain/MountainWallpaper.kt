@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fishrungames.mountainwallpaper
+package fishrungames.reflectedmountain
 
 import android.content.*
 import android.content.pm.ApplicationInfo
@@ -49,7 +49,7 @@ class MountainWallpaper : GLWallpaperService(), SharedPreferences.OnSharedPrefer
         var appInfo: ApplicationInfo? = null
         val packMgmr = this.packageManager
         try {
-            appInfo = packMgmr.getApplicationInfo("fishrungames.mountainwallpaper", 0)
+            appInfo = packMgmr.getApplicationInfo("fishrungames.reflectedmountain", 0)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
             throw RuntimeException("Unable to locate assets, aborting...")

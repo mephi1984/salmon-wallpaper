@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fishrungames.mountainwallpaper
+package fishrungames.reflectedmountain
 
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity

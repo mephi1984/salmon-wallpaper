@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/preferences"
-        class="fishrungames.mountainwallpaper.WallpaperPreferenceFragment"
+        class="fishrungames.reflectedmountain.WallpaperPreferenceFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
